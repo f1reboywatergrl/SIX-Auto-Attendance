@@ -1,0 +1,4 @@
+Fill these with your INA ID (please maintain spacing):
+username = exampleusername
+password = examplepassword
+NIM = 18219024
