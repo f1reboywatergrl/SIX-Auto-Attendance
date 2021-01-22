@@ -100,5 +100,6 @@ for i in linkAbsensi:
     test = i.attrs[2][1]
     # if (len(br.forms)!=0):
     #     Todo: Find button, check value, submit, retrieve subject and return to user
-print('\nSuccessfully marked '+username+' as present in '+test+"!")
-
+root = Tk()
+msg.showinfo('Success', 'Successfully marked '+username+' as present in '+test+"!")
+root.mainloop()
