@@ -7,6 +7,7 @@ import time
 from tkinter import *
 import tkinter.messagebox as msg
 import datetime
+import sys
 
 print('SIX Automated Presence - Gondok')
 
@@ -60,12 +61,16 @@ credentials = {
 
 br.select_form(id='fm1')
 
-
-
 br.form['username'] = credentials['username']
 br.form['password'] = credentials['password']
-
-res = br.submit()
+try:
+    res = br.submit()
+except Exception as e:
+    if (e == 'HTTP Error 401: '):
+        root = Tk()
+        msg.showinfo('Error', 'Received Error 401: Access Denied. Try re-checking your user data in userdata.txt?')
+        root.mainloop()
+        sys.exit()
 
 # Redirecting to original (Jadwal) link
 
@@ -98,8 +103,17 @@ for i in linkAbsensi:
     # print('\n')
     br.open(r'https://akademik.itb.ac.id'+i.attrs[3][1])
     test = i.attrs[2][1]
-    # if (len(br.forms)!=0):
-    #     Todo: Find button, check value, submit, retrieve subject and return to user
-root = Tk()
-msg.showinfo('Success', 'Successfully marked '+username+' as present in '+test+"!")
-root.mainloop()
+    if (len(br.forms())!=0):
+        Hadir = BeautifulSoup(br.response().read(),'html.parser').find('button',{'id':'form_hadir'})
+        if(Hadir!=None and Hadir.text=='Tandai Hadir'):
+            br.select_form(name='form')
+            res = br.submit()
+            root = Tk()
+            msg.showinfo('Success!', 'Successfully marked '+username+' as present in '+test+"!")
+            root.mainloop()            
+        else:
+            root = Tk()
+            msg.showinfo('Notice', username+' is already present in '+test+".")
+            root.mainloop() 
+        break
+
